@@ -5,10 +5,34 @@ import (
 	"context"
 	"sync"
 
-	"github.com/crhntr/muxt-template-module-htmx-sqlc/internal/hypertext"
+	"github.com/crhntr/muxt-template-module-todo/internal/hypertext"
 )
 
 type Server struct {
+	DeleteListStub        func(context.Context, int64) error
+	deleteListMutex       sync.RWMutex
+	deleteListArgsForCall []struct {
+		arg1 context.Context
+		arg2 int64
+	}
+	deleteListReturns struct {
+		result1 error
+	}
+	deleteListReturnsOnCall map[int]struct {
+		result1 error
+	}
+	GetListStub        func(context.Context, int64) hypertext.ListData
+	getListMutex       sync.RWMutex
+	getListArgsForCall []struct {
+		arg1 context.Context
+		arg2 int64
+	}
+	getListReturns struct {
+		result1 hypertext.ListData
+	}
+	getListReturnsOnCall map[int]struct {
+		result1 hypertext.ListData
+	}
 	IndexStub        func(context.Context) hypertext.IndexData
 	indexMutex       sync.RWMutex
 	indexArgsForCall []struct {
@@ -20,8 +44,168 @@ type Server struct {
 	indexReturnsOnCall map[int]struct {
 		result1 hypertext.IndexData
 	}
+	PatchTaskCompleteStub        func(context.Context, int64) hypertext.PatchTaskDoneData
+	patchTaskCompleteMutex       sync.RWMutex
+	patchTaskCompleteArgsForCall []struct {
+		arg1 context.Context
+		arg2 int64
+	}
+	patchTaskCompleteReturns struct {
+		result1 hypertext.PatchTaskDoneData
+	}
+	patchTaskCompleteReturnsOnCall map[int]struct {
+		result1 hypertext.PatchTaskDoneData
+	}
+	PostListStub        func(context.Context, hypertext.PostListValues) hypertext.PostListResult
+	postListMutex       sync.RWMutex
+	postListArgsForCall []struct {
+		arg1 context.Context
+		arg2 hypertext.PostListValues
+	}
+	postListReturns struct {
+		result1 hypertext.PostListResult
+	}
+	postListReturnsOnCall map[int]struct {
+		result1 hypertext.PostListResult
+	}
+	PostTaskStub        func(context.Context, hypertext.PostTaskValues) hypertext.PostTaskResult
+	postTaskMutex       sync.RWMutex
+	postTaskArgsForCall []struct {
+		arg1 context.Context
+		arg2 hypertext.PostTaskValues
+	}
+	postTaskReturns struct {
+		result1 hypertext.PostTaskResult
+	}
+	postTaskReturnsOnCall map[int]struct {
+		result1 hypertext.PostTaskResult
+	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
+}
+
+func (fake *Server) DeleteList(arg1 context.Context, arg2 int64) error {
+	fake.deleteListMutex.Lock()
+	ret, specificReturn := fake.deleteListReturnsOnCall[len(fake.deleteListArgsForCall)]
+	fake.deleteListArgsForCall = append(fake.deleteListArgsForCall, struct {
+		arg1 context.Context
+		arg2 int64
+	}{arg1, arg2})
+	stub := fake.DeleteListStub
+	fakeReturns := fake.deleteListReturns
+	fake.recordInvocation("DeleteList", []interface{}{arg1, arg2})
+	fake.deleteListMutex.Unlock()
+	if stub != nil {
+		return stub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	return fakeReturns.result1
+}
+
+func (fake *Server) DeleteListCallCount() int {
+	fake.deleteListMutex.RLock()
+	defer fake.deleteListMutex.RUnlock()
+	return len(fake.deleteListArgsForCall)
+}
+
+func (fake *Server) DeleteListCalls(stub func(context.Context, int64) error) {
+	fake.deleteListMutex.Lock()
+	defer fake.deleteListMutex.Unlock()
+	fake.DeleteListStub = stub
+}
+
+func (fake *Server) DeleteListArgsForCall(i int) (context.Context, int64) {
+	fake.deleteListMutex.RLock()
+	defer fake.deleteListMutex.RUnlock()
+	argsForCall := fake.deleteListArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *Server) DeleteListReturns(result1 error) {
+	fake.deleteListMutex.Lock()
+	defer fake.deleteListMutex.Unlock()
+	fake.DeleteListStub = nil
+	fake.deleteListReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *Server) DeleteListReturnsOnCall(i int, result1 error) {
+	fake.deleteListMutex.Lock()
+	defer fake.deleteListMutex.Unlock()
+	fake.DeleteListStub = nil
+	if fake.deleteListReturnsOnCall == nil {
+		fake.deleteListReturnsOnCall = make(map[int]struct {
+			result1 error
+		})
+	}
+	fake.deleteListReturnsOnCall[i] = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *Server) GetList(arg1 context.Context, arg2 int64) hypertext.ListData {
+	fake.getListMutex.Lock()
+	ret, specificReturn := fake.getListReturnsOnCall[len(fake.getListArgsForCall)]
+	fake.getListArgsForCall = append(fake.getListArgsForCall, struct {
+		arg1 context.Context
+		arg2 int64
+	}{arg1, arg2})
+	stub := fake.GetListStub
+	fakeReturns := fake.getListReturns
+	fake.recordInvocation("GetList", []interface{}{arg1, arg2})
+	fake.getListMutex.Unlock()
+	if stub != nil {
+		return stub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	return fakeReturns.result1
+}
+
+func (fake *Server) GetListCallCount() int {
+	fake.getListMutex.RLock()
+	defer fake.getListMutex.RUnlock()
+	return len(fake.getListArgsForCall)
+}
+
+func (fake *Server) GetListCalls(stub func(context.Context, int64) hypertext.ListData) {
+	fake.getListMutex.Lock()
+	defer fake.getListMutex.Unlock()
+	fake.GetListStub = stub
+}
+
+func (fake *Server) GetListArgsForCall(i int) (context.Context, int64) {
+	fake.getListMutex.RLock()
+	defer fake.getListMutex.RUnlock()
+	argsForCall := fake.getListArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *Server) GetListReturns(result1 hypertext.ListData) {
+	fake.getListMutex.Lock()
+	defer fake.getListMutex.Unlock()
+	fake.GetListStub = nil
+	fake.getListReturns = struct {
+		result1 hypertext.ListData
+	}{result1}
+}
+
+func (fake *Server) GetListReturnsOnCall(i int, result1 hypertext.ListData) {
+	fake.getListMutex.Lock()
+	defer fake.getListMutex.Unlock()
+	fake.GetListStub = nil
+	if fake.getListReturnsOnCall == nil {
+		fake.getListReturnsOnCall = make(map[int]struct {
+			result1 hypertext.ListData
+		})
+	}
+	fake.getListReturnsOnCall[i] = struct {
+		result1 hypertext.ListData
+	}{result1}
 }
 
 func (fake *Server) Index(arg1 context.Context) hypertext.IndexData {
@@ -85,11 +269,207 @@ func (fake *Server) IndexReturnsOnCall(i int, result1 hypertext.IndexData) {
 	}{result1}
 }
 
+func (fake *Server) PatchTaskComplete(arg1 context.Context, arg2 int64) hypertext.PatchTaskDoneData {
+	fake.patchTaskCompleteMutex.Lock()
+	ret, specificReturn := fake.patchTaskCompleteReturnsOnCall[len(fake.patchTaskCompleteArgsForCall)]
+	fake.patchTaskCompleteArgsForCall = append(fake.patchTaskCompleteArgsForCall, struct {
+		arg1 context.Context
+		arg2 int64
+	}{arg1, arg2})
+	stub := fake.PatchTaskCompleteStub
+	fakeReturns := fake.patchTaskCompleteReturns
+	fake.recordInvocation("PatchTaskComplete", []interface{}{arg1, arg2})
+	fake.patchTaskCompleteMutex.Unlock()
+	if stub != nil {
+		return stub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	return fakeReturns.result1
+}
+
+func (fake *Server) PatchTaskCompleteCallCount() int {
+	fake.patchTaskCompleteMutex.RLock()
+	defer fake.patchTaskCompleteMutex.RUnlock()
+	return len(fake.patchTaskCompleteArgsForCall)
+}
+
+func (fake *Server) PatchTaskCompleteCalls(stub func(context.Context, int64) hypertext.PatchTaskDoneData) {
+	fake.patchTaskCompleteMutex.Lock()
+	defer fake.patchTaskCompleteMutex.Unlock()
+	fake.PatchTaskCompleteStub = stub
+}
+
+func (fake *Server) PatchTaskCompleteArgsForCall(i int) (context.Context, int64) {
+	fake.patchTaskCompleteMutex.RLock()
+	defer fake.patchTaskCompleteMutex.RUnlock()
+	argsForCall := fake.patchTaskCompleteArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *Server) PatchTaskCompleteReturns(result1 hypertext.PatchTaskDoneData) {
+	fake.patchTaskCompleteMutex.Lock()
+	defer fake.patchTaskCompleteMutex.Unlock()
+	fake.PatchTaskCompleteStub = nil
+	fake.patchTaskCompleteReturns = struct {
+		result1 hypertext.PatchTaskDoneData
+	}{result1}
+}
+
+func (fake *Server) PatchTaskCompleteReturnsOnCall(i int, result1 hypertext.PatchTaskDoneData) {
+	fake.patchTaskCompleteMutex.Lock()
+	defer fake.patchTaskCompleteMutex.Unlock()
+	fake.PatchTaskCompleteStub = nil
+	if fake.patchTaskCompleteReturnsOnCall == nil {
+		fake.patchTaskCompleteReturnsOnCall = make(map[int]struct {
+			result1 hypertext.PatchTaskDoneData
+		})
+	}
+	fake.patchTaskCompleteReturnsOnCall[i] = struct {
+		result1 hypertext.PatchTaskDoneData
+	}{result1}
+}
+
+func (fake *Server) PostList(arg1 context.Context, arg2 hypertext.PostListValues) hypertext.PostListResult {
+	fake.postListMutex.Lock()
+	ret, specificReturn := fake.postListReturnsOnCall[len(fake.postListArgsForCall)]
+	fake.postListArgsForCall = append(fake.postListArgsForCall, struct {
+		arg1 context.Context
+		arg2 hypertext.PostListValues
+	}{arg1, arg2})
+	stub := fake.PostListStub
+	fakeReturns := fake.postListReturns
+	fake.recordInvocation("PostList", []interface{}{arg1, arg2})
+	fake.postListMutex.Unlock()
+	if stub != nil {
+		return stub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	return fakeReturns.result1
+}
+
+func (fake *Server) PostListCallCount() int {
+	fake.postListMutex.RLock()
+	defer fake.postListMutex.RUnlock()
+	return len(fake.postListArgsForCall)
+}
+
+func (fake *Server) PostListCalls(stub func(context.Context, hypertext.PostListValues) hypertext.PostListResult) {
+	fake.postListMutex.Lock()
+	defer fake.postListMutex.Unlock()
+	fake.PostListStub = stub
+}
+
+func (fake *Server) PostListArgsForCall(i int) (context.Context, hypertext.PostListValues) {
+	fake.postListMutex.RLock()
+	defer fake.postListMutex.RUnlock()
+	argsForCall := fake.postListArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *Server) PostListReturns(result1 hypertext.PostListResult) {
+	fake.postListMutex.Lock()
+	defer fake.postListMutex.Unlock()
+	fake.PostListStub = nil
+	fake.postListReturns = struct {
+		result1 hypertext.PostListResult
+	}{result1}
+}
+
+func (fake *Server) PostListReturnsOnCall(i int, result1 hypertext.PostListResult) {
+	fake.postListMutex.Lock()
+	defer fake.postListMutex.Unlock()
+	fake.PostListStub = nil
+	if fake.postListReturnsOnCall == nil {
+		fake.postListReturnsOnCall = make(map[int]struct {
+			result1 hypertext.PostListResult
+		})
+	}
+	fake.postListReturnsOnCall[i] = struct {
+		result1 hypertext.PostListResult
+	}{result1}
+}
+
+func (fake *Server) PostTask(arg1 context.Context, arg2 hypertext.PostTaskValues) hypertext.PostTaskResult {
+	fake.postTaskMutex.Lock()
+	ret, specificReturn := fake.postTaskReturnsOnCall[len(fake.postTaskArgsForCall)]
+	fake.postTaskArgsForCall = append(fake.postTaskArgsForCall, struct {
+		arg1 context.Context
+		arg2 hypertext.PostTaskValues
+	}{arg1, arg2})
+	stub := fake.PostTaskStub
+	fakeReturns := fake.postTaskReturns
+	fake.recordInvocation("PostTask", []interface{}{arg1, arg2})
+	fake.postTaskMutex.Unlock()
+	if stub != nil {
+		return stub(arg1, arg2)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	return fakeReturns.result1
+}
+
+func (fake *Server) PostTaskCallCount() int {
+	fake.postTaskMutex.RLock()
+	defer fake.postTaskMutex.RUnlock()
+	return len(fake.postTaskArgsForCall)
+}
+
+func (fake *Server) PostTaskCalls(stub func(context.Context, hypertext.PostTaskValues) hypertext.PostTaskResult) {
+	fake.postTaskMutex.Lock()
+	defer fake.postTaskMutex.Unlock()
+	fake.PostTaskStub = stub
+}
+
+func (fake *Server) PostTaskArgsForCall(i int) (context.Context, hypertext.PostTaskValues) {
+	fake.postTaskMutex.RLock()
+	defer fake.postTaskMutex.RUnlock()
+	argsForCall := fake.postTaskArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2
+}
+
+func (fake *Server) PostTaskReturns(result1 hypertext.PostTaskResult) {
+	fake.postTaskMutex.Lock()
+	defer fake.postTaskMutex.Unlock()
+	fake.PostTaskStub = nil
+	fake.postTaskReturns = struct {
+		result1 hypertext.PostTaskResult
+	}{result1}
+}
+
+func (fake *Server) PostTaskReturnsOnCall(i int, result1 hypertext.PostTaskResult) {
+	fake.postTaskMutex.Lock()
+	defer fake.postTaskMutex.Unlock()
+	fake.PostTaskStub = nil
+	if fake.postTaskReturnsOnCall == nil {
+		fake.postTaskReturnsOnCall = make(map[int]struct {
+			result1 hypertext.PostTaskResult
+		})
+	}
+	fake.postTaskReturnsOnCall[i] = struct {
+		result1 hypertext.PostTaskResult
+	}{result1}
+}
+
 func (fake *Server) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
+	fake.deleteListMutex.RLock()
+	defer fake.deleteListMutex.RUnlock()
+	fake.getListMutex.RLock()
+	defer fake.getListMutex.RUnlock()
 	fake.indexMutex.RLock()
 	defer fake.indexMutex.RUnlock()
+	fake.patchTaskCompleteMutex.RLock()
+	defer fake.patchTaskCompleteMutex.RUnlock()
+	fake.postListMutex.RLock()
+	defer fake.postListMutex.RUnlock()
+	fake.postTaskMutex.RLock()
+	defer fake.postTaskMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
 	for key, value := range fake.invocations {
 		copiedInvocations[key] = value

@@ -6,15 +6,79 @@ import (
 	"bytes"
 	"context"
 	"net/http"
+	"strconv"
 )
 
 type RoutesReceiver interface {
-	Index(_ context.Context) IndexData
+	PostList(ctx context.Context, params PostListValues) PostListResult
+	DeleteList(ctx context.Context, id int64) error
+	GetList(ctx context.Context, id int64) ListData
+	PatchTaskComplete(ctx context.Context, id int64) PatchTaskDoneData
+	PostTask(ctx context.Context, values PostTaskValues) PostTaskResult
+	Index(ctx context.Context) IndexData
 }
 
 func TemplateRoutes(mux *http.ServeMux, receiver RoutesReceiver) {
-	mux.HandleFunc("GET /about", func(response http.ResponseWriter, request *http.Request) {
-		execute(response, request, true, "GET /about", http.StatusOK, request)
+	mux.HandleFunc("POST /list", func(response http.ResponseWriter, request *http.Request) {
+		ctx := request.Context()
+		request.ParseForm()
+		var form PostListValues
+		form.Name = request.FormValue("Name")
+		form.Description = request.FormValue("Description")
+		data := receiver.PostList(ctx, form)
+		execute(response, request, true, "POST /list PostList(ctx, form)", http.StatusOK, data)
+	})
+	mux.HandleFunc("GET /list/create", func(response http.ResponseWriter, request *http.Request) {
+		execute(response, request, true, "GET /list/create", http.StatusOK, request)
+	})
+	mux.HandleFunc("DELETE /list/{id}", func(response http.ResponseWriter, request *http.Request) {
+		ctx := request.Context()
+		idParsed, err := strconv.ParseInt(request.PathValue("id"), 10, 64)
+		if err != nil {
+			http.Error(response, err.Error(), http.StatusBadRequest)
+			return
+		}
+		id := idParsed
+		data := receiver.DeleteList(ctx, id)
+		execute(response, request, true, "DELETE /list/{id} DeleteList(ctx, id)", http.StatusOK, data)
+	})
+	mux.HandleFunc("GET /list/{id}", func(response http.ResponseWriter, request *http.Request) {
+		ctx := request.Context()
+		idParsed, err := strconv.ParseInt(request.PathValue("id"), 10, 64)
+		if err != nil {
+			http.Error(response, err.Error(), http.StatusBadRequest)
+			return
+		}
+		id := idParsed
+		data := receiver.GetList(ctx, id)
+		execute(response, request, true, "GET /list/{id} GetList(ctx, id)", http.StatusOK, data)
+	})
+	mux.HandleFunc("PATCH /task/{id}/complete", func(response http.ResponseWriter, request *http.Request) {
+		ctx := request.Context()
+		idParsed, err := strconv.ParseInt(request.PathValue("id"), 10, 64)
+		if err != nil {
+			http.Error(response, err.Error(), http.StatusBadRequest)
+			return
+		}
+		id := idParsed
+		data := receiver.PatchTaskComplete(ctx, id)
+		execute(response, request, true, "PATCH /task/{id}/complete PatchTaskComplete(ctx, id)", http.StatusOK, data)
+	})
+	mux.HandleFunc("POST /tasks", func(response http.ResponseWriter, request *http.Request) {
+		ctx := request.Context()
+		request.ParseForm()
+		var form PostTaskValues
+		{
+			value, err := strconv.ParseInt(request.FormValue("ListID"), 10, 64)
+			if err != nil {
+				http.Error(response, err.Error(), http.StatusBadRequest)
+				return
+			}
+			form.ListID = value
+		}
+		form.Description = request.FormValue("Description")
+		data := receiver.PostTask(ctx, form)
+		execute(response, request, true, "POST /tasks PostTask(ctx, form)", http.StatusOK, data)
 	})
 	mux.HandleFunc("GET /{$}", func(response http.ResponseWriter, request *http.Request) {
 		ctx := request.Context()

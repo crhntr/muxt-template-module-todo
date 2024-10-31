@@ -3,6 +3,7 @@ package hypertext_test
 import (
 	"net/http"
 	"net/http/httptest"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -10,8 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/crhntr/muxt-template-module-htmx-sqlc/internal/fake"
-	"github.com/crhntr/muxt-template-module-htmx-sqlc/internal/hypertext"
+	"github.com/crhntr/muxt-template-module-todo/internal/database"
+	"github.com/crhntr/muxt-template-module-todo/internal/fake"
+	"github.com/crhntr/muxt-template-module-todo/internal/hypertext"
 )
 
 func TestTemplates(t *testing.T) {
@@ -24,19 +26,27 @@ func TestTemplates(t *testing.T) {
 			Name: "the header has the name",
 			Request: func(srv *fake.Server) *http.Request {
 				srv.IndexReturns(hypertext.IndexData{
-					Name: "somebody",
+					Lists: []database.List{
+						{ID: 1, Name: "to eat"},
+						{ID: 2, Name: "to drink"},
+						{ID: 3, Name: "to watch"},
+						{ID: 3, Name: "to play"},
+					},
 				})
 				return httptest.NewRequest(http.MethodGet, "/", nil)
 			},
-			Response: func(rsv *fake.Server, res *http.Response) {
-				if assert.Equal(t, 1, rsv.IndexCallCount()) {
-					ctx := rsv.IndexArgsForCall(0)
+			Response: func(srv *fake.Server, res *http.Response) {
+				if assert.Equal(t, 1, srv.IndexCallCount()) {
+					ctx := srv.IndexArgsForCall(0)
 					require.NotNil(t, ctx)
 				}
 				assert.Equal(t, http.StatusOK, res.StatusCode)
 				doc := domtest.Response(t, res)
-				if el := doc.QuerySelector(`h1`); assert.NotNil(t, el) {
-					assert.Equal(t, "Hello, somebody!", strings.TrimSpace(el.TextContent()))
+				if links := doc.QuerySelectorAll(`ul#lists li a`); assert.Equal(t, 4, links.Length()) {
+					for el := range doc.QuerySelectorEach(`ul#lists li a`) {
+						assert.NotZero(t, el.TextContent())
+						assert.Regexp(t, regexp.MustCompile(`/list/\d+`), el.GetAttribute("href"))
+					}
 				}
 			},
 		},
