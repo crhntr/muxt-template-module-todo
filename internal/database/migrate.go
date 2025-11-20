@@ -20,8 +20,5 @@ func Migrate(config pgx.ConnConfig) error {
 	if err := goose.Up(db, "migrations"); err != nil {
 		return err
 	}
-	if err := goose.Up(db, "migrations"); err != nil {
-		return err
-	}
 	return nil
 }
