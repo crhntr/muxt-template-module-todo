@@ -5,6 +5,8 @@ import (
 	"embed"
 	"html/template"
 
+	"github.com/jackc/pgx/v5"
+
 	"github.com/crhntr/muxt-template-module-todo/internal/database"
 )
 
@@ -84,18 +86,20 @@ type ListData struct {
 }
 
 func (srv *Server) GetList(ctx context.Context, id int64) (ListData, error) {
-	list, err := srv.DBQuery.SelectList(ctx, srv.DBConn, id)
-	if err != nil {
-		return ListData{}, err
-	}
-	tasks, err := srv.DBQuery.SelectTasksForList(ctx, srv.DBConn, id)
-	if err != nil {
-		return ListData{}, err
-	}
-	return ListData{
-		List:  list,
-		Tasks: tasks,
-	}, err
+	return database.Transaction(ctx, srv.DBConn, pgx.TxOptions{AccessMode: pgx.ReadOnly, IsoLevel: pgx.Serializable}, func(ctx context.Context, dbtx database.DBTX) (ListData, error) {
+		list, err := srv.DBQuery.SelectList(ctx, srv.DBConn, id)
+		if err != nil {
+			return ListData{}, err
+		}
+		tasks, err := srv.DBQuery.SelectTasksForList(ctx, srv.DBConn, id)
+		if err != nil {
+			return ListData{}, err
+		}
+		return ListData{
+			List:  list,
+			Tasks: tasks,
+		}, err
+	})
 }
 
 type IndexData struct {
