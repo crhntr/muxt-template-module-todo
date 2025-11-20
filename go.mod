@@ -28,4 +28,10 @@ require (
 	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/tools v0.39.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	rsc.io/script v0.0.2 // indirect
+)
+
+tool (
+	github.com/crhntr/muxt/cmd/muxt
+	github.com/maxbrunsfeld/counterfeiter/v6
 )
