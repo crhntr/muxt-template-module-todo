@@ -1,3 +1,6 @@
+[settings]
+lockfile = true
+
 [tools]
 "go:github.com/maxbrunsfeld/counterfeiter/v6" = "latest"
 "go:github.com/mikefarah/yq/v4" = "latest"
