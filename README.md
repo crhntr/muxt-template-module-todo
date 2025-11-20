@@ -15,6 +15,8 @@ It extends the module by using sqlc to for database interactions with PostgreSQL
 - [pqx](https://pkg.go.dev/github.com/jackc/pgx/v5): for a database driver
 - [goose](https://github.com/pressly/goose): for migrations
 
+Tool versions are managed with [Mise](https://mise.jdx.dev/).
+
 ## Developing
 
 Add new html in `./internal/hypertext/templates`.
@@ -52,10 +54,7 @@ go run ./cmd/server
 
 The database connection is configured via the `DATABASE_URL` environment variable.
 
-The included `.envrc` sets this automatically when using [direnv](https://direnv.net/):
-```
-postgres://todo:todo@localhost:5432/todo?sslmode=disable
-```
+The included `.envrc` sets this automatically when using [direnv](https://direnv.net/), reading credentials directly from `docker-compose.yml`.
 
 ### Docker Compose
 
