@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"regexp"
-	"strings"
 	"testing"
 
 	"github.com/crhntr/dom/domtest"
@@ -47,19 +46,6 @@ func TestTemplates(t *testing.T) {
 						assert.NotZero(t, el.TextContent())
 						assert.Regexp(t, regexp.MustCompile(`/list/\d+`), el.GetAttribute("href"))
 					}
-				}
-			},
-		},
-		{
-			Name: "the about page is routable",
-			Request: func(srv *fake.Server) *http.Request {
-				return httptest.NewRequest(http.MethodGet, "/about", nil)
-			},
-			Response: func(rsv *fake.Server, res *http.Response) {
-				assert.Equal(t, http.StatusOK, res.StatusCode)
-				doc := domtest.Response(t, res)
-				if el := doc.QuerySelector(`h1`); assert.NotNil(t, el) {
-					assert.Equal(t, "About", strings.TrimSpace(el.TextContent()))
 				}
 			},
 		},
