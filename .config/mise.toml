@@ -6,3 +6,6 @@ lockfile = true
 "go:github.com/mikefarah/yq/v4" = "latest"
 "go:github.com/sqlc-dev/sqlc/cmd/sqlc" = "latest"
 "go:github.com/typelate/muxt/cmd/muxt" = "latest"
+
+[env]
+_.source = ".config/mise/env.sh"
