@@ -1,6 +1,6 @@
 # A Simple MUXT Project Template using HTMX
 
-This is an example [muxt](http://github.com/crhntr/muxt) hypertext server.
+This is an example [muxt](http://github.com/typelate/muxt) hypertext server.
 See this article for how to use this template: https://go.dev/blog/gonew.
 
 It is based on https://github.com/crhntr/muxt-template-module-htmx.

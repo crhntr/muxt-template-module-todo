@@ -3,7 +3,6 @@
 {{template "head" "About"}}
 <body>
 <main class='container'>
-	{{- /* gotype: github.com/crhntr/muxt-template-module-todo/internal/hypertext.ListData */ -}}
 	{{template "view list" .}}
 </main>
 {{template "footer"}}
@@ -12,17 +11,17 @@
 
 {{define "view list"}}
 	<article>
-		<h1 data-test-id='list-name'>{{.List.Name}}</h1>
+		<h1 data-test-id='list-name'>{{.Result.List.Name}}</h1>
 
-		<pre data-test-id='list-description'>{{.List.Description}}</pre>
+		<pre data-test-id='list-description'>{{.Result.List.Description}}</pre>
 
 		<ol id='tasks-list'>
-      {{range .Tasks}}
+      {{range .Result.Tasks}}
         {{template "task" .}}
       {{end}}
 		</ol>
 
-		<button hx-target='main' hx-delete='/list/{{.List.ID}}'>Delete List</button>
+		<button hx-target='main' hx-delete='/list/{{.Result.List.ID}}'>Delete List</button>
 	</article>
 
 	<article>
@@ -30,19 +29,19 @@
 	</article>
 {{end}}
 
-{{- define "DELETE /list/{id} DeleteList(ctx, id)" -}}
-	{{if .}}
-    {{template "error" .Error}}
-	{{else}}
+{{- define "DELETE /list/{id} DeleteList(ctx, id)"}}
+	{{- if .Err}}
+    {{template "error" .Err}}
+	{{- else}}
 		<p>List Deleted</p>
-	{{end}}
-{{- end -}}
+	{{- end}}
+{{- end}}
 
 {{- define "GET /list/{id} GetList(ctx, id)" -}}
 	{{template "list.gohtml" .}}
 {{- end -}}
 
-{{- define "GET /list/create" -}}
+{{define "GET /list/create" -}}
 <form hx-post='/list'>
 	<h2>Create List</h2>
 	<label>Name
@@ -53,29 +52,29 @@
 	</label>
 	<input type='submit'>
 </form>
-{{- end -}}
+{{- end}}
 
-{{define "error"}}{{with .}}
+{{- define "error"}}{{with .}}
 	<p class='error'>{{.}}</p>
 {{end}}{{end}}
 
-{{- define "POST /list PostList(ctx, form)" -}}
-  {{- if .Error -}}
+{{- define "POST /list PostList(ctx, form)"}}
+  {{- if .Err}}
 	  <form hx-post='/list'>
 		  <h2>Create List</h2>
 		  <label>Name
-			  <input name='Name' value='{{.Values.Name}}'>
+			  <input name='Name' value='{{.Result.Values.Name}}'>
 		  </label>
 		  <label>Description
-			  <input name='Description' value='{{.Values.Description}}'>
+			  <input name='Description' value='{{.Result.Values.Description}}'>
 		  </label>
-      {{template "error" .Error}}
+      {{template "error" .Err}}
 		  <input type='submit'>
 	  </form>
-  {{- else -}}
+  {{- else}}
 	  <ul hx-swap-oob='beforeend: #lists'>
-		  <li><a href='/list/{{.List.ID}}'>{{.List.Name}}</a></li>
+		  <li><a href='/list/{{.Result.List.ID}}'>{{.Result.List.Name}}</a></li>
 	  </ul>
-    {{- template "GET /list/create" -}}
-  {{- end -}}
-{{- end -}}
+    {{- template "GET /list/create"}}
+  {{- end}}
+{{- end}}

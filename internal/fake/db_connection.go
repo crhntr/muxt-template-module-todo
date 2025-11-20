@@ -335,14 +335,6 @@ func (fake *DBConnection) QueryRowReturnsOnCall(i int, result1 pgx.Row) {
 func (fake *DBConnection) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
-	fake.beginTxMutex.RLock()
-	defer fake.beginTxMutex.RUnlock()
-	fake.execMutex.RLock()
-	defer fake.execMutex.RUnlock()
-	fake.queryMutex.RLock()
-	defer fake.queryMutex.RUnlock()
-	fake.queryRowMutex.RLock()
-	defer fake.queryRowMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
 	for key, value := range fake.invocations {
 		copiedInvocations[key] = value
