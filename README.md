@@ -33,4 +33,45 @@ Run tests with: `go test ./...`
 
 ## Database
 
-Set the database URL with the environment variable `DATABASE_URL`.
+This project uses PostgreSQL with pgx/v5.
+
+### Quick Start
+
+```bash
+# Start PostgreSQL with Docker
+docker compose up -d
+
+# Load environment variables (requires direnv)
+direnv allow
+
+# Run the server
+go run ./cmd/server
+```
+
+### Configuration
+
+The database connection is configured via the `DATABASE_URL` environment variable.
+
+The included `.envrc` sets this automatically when using [direnv](https://direnv.net/):
+```
+postgres://todo:todo@localhost:5432/todo?sslmode=disable
+```
+
+### Docker Compose
+
+The `docker-compose.yml` provides a PostgreSQL 17 instance with:
+- Database: `todo`
+- User: `todo`
+- Password: `todo`
+- Port: `5432`
+
+```bash
+# Start database
+docker compose up -d
+
+# Stop database
+docker compose down
+
+# Stop and remove data
+docker compose down -v
+```

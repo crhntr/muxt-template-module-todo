@@ -18,7 +18,11 @@ func main() {
 	startupCTX, cancel := context.WithTimeout(context.Background(), time.Minute*5)
 	defer cancel()
 
-	conn, err := pgx.Connect(startupCTX, os.Getenv("DATABASE_URL"))
+	databaseURL, ok := os.LookupEnv("DATABASE_URL")
+	if !ok {
+		log.Fatal("DATABASE_URL environment variable not set")
+	}
+	conn, err := pgx.Connect(startupCTX, databaseURL)
 	if err != nil {
 		log.Fatal(err)
 	}
