@@ -40,9 +40,9 @@ func TestTemplates(t *testing.T) {
 					require.NotNil(t, ctx)
 				}
 				assert.Equal(t, http.StatusOK, res.StatusCode)
-				doc := domtest.Response(t, res)
+				doc := domtest.ParseResponseDocument(t, res)
 				if links := doc.QuerySelectorAll(`ul#lists li a`); assert.Equal(t, 4, links.Length()) {
-					for el := range doc.QuerySelectorEach(`ul#lists li a`) {
+					for el := range doc.QuerySelectorSequence(`ul#lists li a`) {
 						assert.NotZero(t, el.TextContent())
 						assert.Regexp(t, regexp.MustCompile(`/list/\d+`), el.GetAttribute("href"))
 					}

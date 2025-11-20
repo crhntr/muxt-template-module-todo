@@ -3,7 +3,7 @@ module github.com/crhntr/muxt-template-module-todo
 go 1.24.0
 
 require (
-	github.com/crhntr/dom v0.1.0-dev.7
+	github.com/crhntr/dom v0.5.4
 	github.com/crhntr/muxt v0.9.13
 	github.com/jackc/pgx/v5 v5.7.6
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.12.0
