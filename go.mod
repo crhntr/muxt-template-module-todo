@@ -7,7 +7,7 @@ require (
 	github.com/crhntr/muxt v0.9.13
 	github.com/jackc/pgx/v5 v5.7.6
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.12.0
-	github.com/pressly/goose/v3 v3.22.1
+	github.com/pressly/goose/v3 v3.26.0
 	github.com/stretchr/testify v1.11.1
 )
 
